@@ -1,2 +1,4 @@
 venv
 .env
+template.py
+**/__pycache__

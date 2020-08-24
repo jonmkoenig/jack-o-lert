@@ -11,6 +11,7 @@ from email.message import EmailMessage
 from jinja2 import Template 
 from datetime import date
 from dotenv import load_dotenv
+from template import template_file
 load_dotenv()
 
 """
@@ -32,57 +33,25 @@ list = requests.get(api_query).json()
 
 def sendMail():
     """
+
     Format an email with Jinja2, then finish creating setting options with EmailMessage.
     Append the finished template to the email using add_alternative and send it out.
+
+    template_file is a python file in the same directory that is imported and
+    used to format our data. It looks like this:
+
+    template_file = '''
+    <html>
+        <body>
+            <div class="main-content">
+            </div>
+        </body>
+    </html>
+    '''
+    ..ETC
+
     """
-    body_template = Template("""
-        <!DOCTYPE html>
-        <html>
-            <head>
-                <style>
-                    .movie-container {
-                        display: flex;
-                        flex-direction: column;
-                    }
-
-                    .movie-container div {
-                        padding: 10px;
-                        margin: 7px 2px;
-                    }
-
-                    h1, h2 {
-                        text-align: center;
-                    }
-
-                    .orange {
-                        color: orange;
-                    }
-
-                    .title {
-                        margin: 0px;
-                    }
-
-                    .date {
-                        margin-top: 2px;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>Hey, look! It's time for our spooky movie newsletter!</h1>
-                <div class="movie-container">
-                    {% for movie in stripped_movies %}
-                    <div class="movie">
-                    <h1 class="title orange">{{ movie.title }}</h1>
-                    <h2 class="date orange">{{ movie.release_data}} </h2>
-                    <p>{{ movie.overview }}</p>
-                    <small>Original language: {{ movie.original_language }}</small>
-                    </div>
-                    {% endfor %}
-                </div>
-                <p>Psst.. Jon talks about you so much, I think he loves you! <3</p>
-            </body>
-        </html>
-    """)
+    body_template = Template(template_file)
     body = body_template.render(stripped_movies=stripped_movies, current_date=current_date)
 
     msg = EmailMessage()
@@ -109,7 +78,8 @@ def filterMetadata():
                 "title": movie["title"],
                 "original_language": movie["original_language"],
                 "overview": movie["overview"],
-                "release_data": movie["release_date"]
+                "release_data": movie["release_date"],
+                "poster_path": movie["poster_path"]
                 }
         stripped_movies.append(stripped_movie)
     sendMail()
