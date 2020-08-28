@@ -2,3 +2,4 @@ venv
 .env
 template.py
 **/__pycache__
+quotes.py

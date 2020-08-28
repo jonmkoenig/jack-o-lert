@@ -1,21 +1,25 @@
 """
-This script pulls down all the upcoming movies, sorts them based on genre, 
-strips out unwanted information and emails it to {you}
+Retrieves upcoming horror movies from TMBD and sends HTML emails.
+
+Options set with dotenv.
+Template pulled in from template.py
 """
 
 import os
 import json
 import requests
 import smtplib
+import random
+import quotes
 from email.message import EmailMessage
-from jinja2 import Template 
+from jinja2 import Template
 from datetime import date
 from dotenv import load_dotenv
 from template import template_file
 load_dotenv()
 
 """
-Create a .dotenv in the same directory and settings in this format:
+Create a .dotenv in the same directory, settings are in this format:
 email_address = "me@gmail.com"
 """
 email_address = os.environ.get("email_address")
@@ -44,6 +48,8 @@ def sendMail():
     <html>
         <body>
             <div class="main-content">
+                <p>Words words</p>
+                <p>{{stuff}}</p>
             </div>
         </body>
     </html>
@@ -52,7 +58,8 @@ def sendMail():
 
     """
     body_template = Template(template_file)
-    body = body_template.render(stripped_movies=stripped_movies, current_date=current_date)
+    body = body_template.render(stripped_movies=stripped_movies,
+            current_date=current_date, quote=random.choice(quotes.quotes))
 
     msg = EmailMessage()
     msg["Subject"] = "Spooky movies? ;)"
