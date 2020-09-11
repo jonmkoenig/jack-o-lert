@@ -6,49 +6,17 @@ import os
 import json
 import requests
 import smtplib
-
-# quotes & random are used for my example only.
 import quotes
 import random
-
+from jinja2 import Template
+from template import template_file
 from email.message import EmailMessage
 from datetime import date
 from dotenv import load_dotenv
 current_date = date.today()
 
-"""
-
-Jinja2 is used to build an email later in the script, so we import Template
-from jinja2.
-
-template_file is the actual Jinja2 template that you need to create, kept in a separate file to make it
-more private. It looks like this:
-
-template_file = '''
-<html>
-    <body>
-        <div class="main-content">
-            <p>Words words</p>
-            <p>{{stuff}}</p>
-        </div>
-    </body>
-</html>
-'''
-
-"""
-from jinja2 import Template
-from template import template_file
-
 load_dotenv()
 
-"""
-
-The script is using python-dotenv, so create a .env file and fill out the
-settings below in this format:
-
-email_address = "address@gmail.com"
-
-"""
 # SMTP address of the server you are sending from.
 smtp_address = os.environ.get("smtp_address")
 
@@ -64,8 +32,7 @@ target_address = os.environ.get("target_address")
 # App password for accounts with 2FA.
 app_password = os.environ.get("app_password")
 
-# These settings and variables are used for my own example and are not
-# necessary to keep in your script.
+# These settings and variables are used for my own example.
 api_query = os.environ.get("api_query")
 stripped_movies = []
 filter_cache = []
@@ -121,7 +88,5 @@ def filterGenre():
         print("No movies found!")
     filterMetadata()
 
-# The list variable represents our data and is used for my example only.
 list = requests.get(api_query).json()
-
 filterGenre()
