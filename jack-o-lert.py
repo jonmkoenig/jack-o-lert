@@ -1,68 +1,85 @@
 """
-Retrieves upcoming horror movies from TMBD and sends HTML emails.
-
-Options set with dotenv.
-Template pulled in from template.py
+A template for emailing stuff with Python & Jinja2.
 """
 
 import os
 import json
 import requests
 import smtplib
-import random
+
+# quotes & random are used for my example only.
 import quotes
+import random
+
 from email.message import EmailMessage
-from jinja2 import Template
 from datetime import date
 from dotenv import load_dotenv
+current_date = date.today()
+
+"""
+
+Jinja2 is used to build an email later in the script, so we import Template
+from jinja2.
+
+template_file is the actual Jinja2 template that you need to create, kept in a separate file to make it
+more private. It looks like this:
+
+template_file = '''
+<html>
+    <body>
+        <div class="main-content">
+            <p>Words words</p>
+            <p>{{stuff}}</p>
+        </div>
+    </body>
+</html>
+'''
+
+"""
+from jinja2 import Template
 from template import template_file
+
 load_dotenv()
 
 """
-Create a .dotenv in the same directory, settings are in this format:
-email_address = "me@gmail.com"
+
+The script is using python-dotenv, so create a .env file and fill out the
+settings below in this format:
+
+email_address = "address@gmail.com"
+
 """
-email_address = os.environ.get("email_address")
-target_address = os.environ.get("target_address")
-app_password = os.environ.get("app_password")
+# SMTP address of the server you are sending from.
 smtp_address = os.environ.get("smtp_address")
+
+# Sending address.
+email_address = os.environ.get("email_address")
+
+# Subject of the email.
+subject = os.environ.get("subject")
+
+# Receiving address.
+target_address = os.environ.get("target_address")
+
+# App password for accounts with 2FA.
+app_password = os.environ.get("app_password")
+
+# These settings and variables are used for my own example and are not
+# necessary to keep in your script.
 api_query = os.environ.get("api_query")
-contacts = os.environ.get("contacts")
-current_date = date.today()
 stripped_movies = []
 filter_cache = []
 
-# Get all upcoming movies in JSON.
-list = requests.get(api_query).json()
-
 def sendMail():
     """
-
-    Format an email with Jinja2, then finish creating setting options with EmailMessage.
-    Append the finished template to the email using add_alternative and send it out.
-
-    template_file is a python file in the same directory that is imported and
-    used to format our data. It looks like this:
-
-    template_file = '''
-    <html>
-        <body>
-            <div class="main-content">
-                <p>Words words</p>
-                <p>{{stuff}}</p>
-            </div>
-        </body>
-    </html>
-    '''
-    ..ETC
-
+    Mixes the data and template together before sending out an email.
     """
     body_template = Template(template_file)
     body = body_template.render(stripped_movies=stripped_movies,
             current_date=current_date, quote=random.choice(quotes.quotes))
 
     msg = EmailMessage()
-    msg["Subject"] = "Spooky movies? ;)"
+    msg["Subject"] = subject
     msg["From"] = email_address
     msg["To"] = target_address
     msg.add_alternative(body, subtype="html")
@@ -75,10 +92,11 @@ def sendMail():
         smtp.login(email_address, app_password)
         smtp.send_message(msg)
 
+# The functions below are used for my example only.
 def filterMetadata():
     """
-    Take the filter_cache and strip out all of the unwanted
-    information, resulting in a list of dictionaries, stripped_movies.
+    Strip out the unwanted information from the remaining movies and store them
+    in the stripped_movies variable.
     """
     for movie in filter_cache:
         stripped_movie = {
@@ -93,8 +111,7 @@ def filterMetadata():
 
 def filterGenre():
     """
-    Take the list and filter out everything but spooky movies. Store the
-    results in filter_cache.
+    Filter the movies and store the results in the filter_cache variable.
     """
     if (list):
         for movie in list["results"]:
@@ -103,5 +120,8 @@ def filterGenre():
     else:
         print("No movies found!")
     filterMetadata()
+
+# The list variable represents our data and is used for my example only.
+list = requests.get(api_query).json()
 
 filterGenre()
