@@ -19,32 +19,32 @@ template_string = """
                 max-width: 700px;
             }
 
-            .orange {
-                color: orange;
-            }
-
             .title {
-                margin: 0px;
+                margin-top: 20px;
             }
-
+            
             .date {
-                margin-top: 2px;
+                margin-top: 0px;
+            }
+            
+            #intro {
+                margin: 65px auto
             }
         </style>
     </head>
     <body>
+    <h1 id="intro">New spooky movies! >:D</h1>
         <div class="movie-container">
             {% for movie in data %}
             <div class="movie">
-                <h1 class="title orange">{{ movie.title }}</h1>
-                <h2 class="date orange">{{ movie.release_data}} </h2>
+                <h2 class="title">{{ movie.title }}</h2>
+                <h3 class="date">{{ movie.release_data}}</h3>
                 <img src="http://image.tmdb.org/t/p/w300{{ movie.poster_path }}"/>
                 <p>{{ movie.overview }}</p>
-                <small>Original language: {{ movie.original_language }}</small>
+                <p>Language: {{ movie.original_language }}</p>
             </div>
             {% endfor %}
         </div>
-        <p>{{quote}}</p>
     </body>
 </html>
 """
