@@ -1,4 +1,8 @@
-template_file = """
+"""
+This is a Jinja2 template file, we will inject our variables and then send this out with smtplib.
+"""
+
+template_string = """
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,7 +11,7 @@ template_file = """
                 text-align: center;
             }
 
-            .movie-container div {
+            .movie {
                 padding: 10px;
                 margin: 30px auto;
                 background: rgb(245, 245, 245);
@@ -30,7 +34,7 @@ template_file = """
     </head>
     <body>
         <div class="movie-container">
-            {% for movie in stripped_movies %}
+            {% for movie in data %}
             <div class="movie">
                 <h1 class="title orange">{{ movie.title }}</h1>
                 <h2 class="date orange">{{ movie.release_data}} </h2>

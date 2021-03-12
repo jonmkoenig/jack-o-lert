@@ -1,4 +1,5 @@
 venv
-.env
 **/__pycache__
-quotes.py
+**/.vscode
+jackolert/env.py
+.idea
