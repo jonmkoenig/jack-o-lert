@@ -1,16 +1,22 @@
 """
-This script makes a GET request to a movie API, sorts the data based on the 'genre_ids' field that the API gives us,
-formats the remaining data using Jinja2 and sends out the information via smtplib.
+Template and example for serving HTML emails with Python and Jinja2.
 """
 
-
+# Module imports
 import requests
 import smtplib
 from jinja2 import Template
 from email.message import EmailMessage
-from jackolert.template.template import *
-from jackolert.env import *
 
+# This statement is importing our template file located in jack-o-lert/jackolert/template/template.py
+from jackolert.template.template import *
+
+"""
+This statement is importing everything from jack-o-lert/jackolert/env.py -- this is where we keep sensitive information like your API query string 
+and email addresses so that they can more easily be kept out of github with a .gitignore file. You will find a dummy file called env_dummy.py
+in that directory, you should rename it to env.py and update the values before you continue.
+"""
+from jackolert.env import *
 
 def main():
     """
