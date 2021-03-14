@@ -1,5 +1,5 @@
 """
-Template and example for serving HTML emails with Python and Jinja2.
+A detailed overview on programmatically sending templated emails with Python and Jinja2.
 """
 
 # Module imports
