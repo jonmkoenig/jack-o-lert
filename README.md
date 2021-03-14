@@ -1,9 +1,9 @@
-### SETUP
+## Setup
 
 Start by cloning the repository.
 
 ```sh
-git clone https://github.com/jonmkoenig/jack-o-lert
+git clone https://github.com/jokocide/jack-o-lert.git
 ```
 
 Move to the jack-o-lert directory and create a virtual environment.
@@ -18,7 +18,7 @@ Activate the virtual environment.
 source venv/bin/activate
 ```
 
-Finally, install the project dependencies.
+Install the project dependencies.
 
 ```sh
 pip install -r requirements.txt
@@ -46,11 +46,9 @@ app_password = "app_password"
 If you want to send the email to multiple people you can use a comma separated list instead.
 
 ```sh
-target_address = "freddy@gmail.com", "jason@gmail.com"
+target_address = "freddy@mailbox.org", "jason@tuta.io"
 ```
 
 Lastly, modify jack-o-lert.py to make some API calls and change template.py to better suit your data.
-
-### EXAMPLE
 
 In my example, I make an API call to retrieve a list of movies, parse the information by running it through two functions to keep only the information that I need, and then use a [Jinja2](https://jinja.palletsprojects.com/en/2.11.x/templates/) template to format that information and make it look a little better.
