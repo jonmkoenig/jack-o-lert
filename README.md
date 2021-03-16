@@ -1,3 +1,5 @@
+I created this repository to serve as a detailed overview on programmatically sending emails. I'm using Python here because I've noticed that most languages seem to rely on a third party module for this type of stuff, and I find them to be overly verbose for such a simple task. Python has the excellent [smtplib](https://docs.python.org/3/library/smtplib.html) built in and we can leverage [Jinja2](https://jinja.palletsprojects.com/en/2.11.x/templates/) templates to send pretty much anything we would ever need.
+
 ## Setup
 
 Start by cloning the repository.
@@ -15,40 +17,45 @@ python3 -m venv venv
 Activate the virtual environment.
 
 ```sh
+# Windows
+.\venv\Scripts\activate
+
+# Unix
 source venv/bin/activate
+```
+
+Confirm that pip is actually pointing to your virtual environment.
+
+```sh
+# Windows
+Get-Command pip
+# ... C:\Users\jokocide\Code\jack-o-lert\venv\Scripts\pip.exe
+
+# Unix
+which pip
+# ... /users/jokocide/code/jack-o-lert/venv/bin/pip
 ```
 
 Install the project dependencies.
 
 ```sh
-pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
 ```
 
-We are using [python-dotenv](https://pypi.org/project/python-dotenv/), so create a .env file and populate it with your own email settings.
+This project is set up with some example functionality. You can open up *main.py* and see how we are making a GET request to an API, processing the data with a few functions and then injecting our data into the Jinja2 template before we send the email with smtplib. This is all kept pretty simple and thanks to Python's standard library we don't really need to rely on using a ton of third party modules to get this done. You can remove any remaining module imports that you don't need, but I've kept them pretty sparse to be applicable to most use cases.
 
-```sh
-# SMTP address of the server you are sending from.
-smtp_address = "smtp_address"
+Go ahead and open up *main.py*. You'll see that the document includes docstrings to walk you through configuring the files that we need to get this going, but here is an overview:
 
-# Sending address.
-email_address = "email_address"
+1. Rename the *jack-o-lert/jackolert/dummy_env.py* file to *env.py*. Update the values.
+2. Review the template file at *jack-o-lert/jackolert/template/template.py*
+3. *main.py* includes example functions to demonstrate making an API call. The *sendMail* function details using smptlib and Jinja2, so you might want to pay attention to that one.
 
-# Subject of the email.
-subject = "subject"
+> Phantom variables? don't forget that we are importing from template.py & env.py.
 
-# Receiving address.
-target_address = "target_address"
+After everything is said and done, you can try firing off a test email to your own address by targeting yourself in the receiving_address field in env.py. You can also send emails to multiple people by specifying it in the following format:
 
-# App password for accounts with 2FA.
-app_password = "app_password"
+```py
+receiving_address = "person1@outlook.com, person2@outlook.com"
 ```
 
-If you want to send the email to multiple people you can use a comma separated list instead.
-
-```sh
-target_address = "freddy@mailbox.org", "jason@tuta.io"
-```
-
-Lastly, modify jack-o-lert.py to make some API calls and change template.py to better suit your data.
-
-In my example, I make an API call to retrieve a list of movies, parse the information by running it through two functions to keep only the information that I need, and then use a [Jinja2](https://jinja.palletsprojects.com/en/2.11.x/templates/) template to format that information and make it look a little better.
+Feel free to [contact](mailto:jokobox@outlook.com) me if have questions or comments.
